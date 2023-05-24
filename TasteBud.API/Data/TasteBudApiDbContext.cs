@@ -21,5 +21,10 @@ namespace TasteBud.API.Data
         {
             base.OnModelCreating(builder);
         }
+
+        public DbSet<Models.Quiz> Quiz { get; set; }
+
+        public DbSet<Models.Result> Result { get; set; }
+
     }
 }
