@@ -29,5 +29,24 @@ namespace TasteBud.API.Controllers
             // Return result of the registration process in an Ok response
             return Ok(result);
         }
+
+        // POST: api/user/login
+        // Endpoint for user login
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginViewModel loginViewModel)
+        {
+            // Call UserService to perform the login operation
+            var result = await _userService.Login(loginViewModel);
+
+            if (!string.IsNullOrEmpty(result?.Token))
+            {
+                // If the login is successful and a valid jwt token is generated,
+                // return the token in an Ok response
+                return Ok(result);
+            }
+
+            // If login fails, return an Unauthorized response
+            return Unauthorized();
+        }
     }
 }
