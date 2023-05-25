@@ -10,7 +10,6 @@ namespace TasteBud.API.Models
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey("UserId")]
         public string UserId { get; set; }
 
         public DateTime Date { get; set; }
@@ -19,8 +18,7 @@ namespace TasteBud.API.Models
 
         public string Cuisine { get; set; }
 
-        // Navigation property
-        public IdentityUser User {get; set;}
+        // Navigation properties
 
         // one Quiz can have many random Results generated,
         // a Quiz doesn't have to a Result at first so a nullable value is allowed

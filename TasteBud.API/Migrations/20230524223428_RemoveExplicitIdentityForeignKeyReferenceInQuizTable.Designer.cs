@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TasteBud.API.Data;
 
@@ -11,9 +12,11 @@ using TasteBud.API.Data;
 namespace TasteBud.API.Migrations
 {
     [DbContext(typeof(TasteBudApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230524223428_RemoveExplicitIdentityForeignKeyReferenceInQuizTable")]
+    partial class RemoveExplicitIdentityForeignKeyReferenceInQuizTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
