@@ -10,10 +10,8 @@ namespace TasteBud.API.Models
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey("UserId")]
         public string UserId { get; set; }
 
-        [ForeignKey("QuizId")]
         public int QuizId { get; set; }
 
         public DateTime Date { get; set; }
@@ -23,10 +21,5 @@ namespace TasteBud.API.Models
         public string Location { get; set; }
 
         public string PriceRange { get; set; }
-
-        // Navigation properties
-        public IdentityUser User { get; set; }
-
-        public Quiz Quiz { get; set; }
     }
 }
