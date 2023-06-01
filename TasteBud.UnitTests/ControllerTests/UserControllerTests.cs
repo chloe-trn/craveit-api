@@ -27,11 +27,10 @@ namespace TasteBud.UnitTests.ControllerTests
             // Arrange
             var registerViewModel = _fixture.Create<RegisterViewModel>();
             var generalResponseViewModel = _fixture.Create<GeneralResponseViewModel>();
-            var generalResponseViewModelTask = Task.FromResult(generalResponseViewModel);
 
             // Set up the mock user service to return the fake response task
             _mockUserService.Setup(repo => repo.Register(It.IsAny<RegisterViewModel>()))
-                .Returns(generalResponseViewModelTask);
+                .ReturnsAsync(generalResponseViewModel);
 
             // Create the controller with the mock user service
             _userController = new UserController(_mockUserService.Object);
@@ -52,11 +51,10 @@ namespace TasteBud.UnitTests.ControllerTests
             // Arrange
             var loginViewModel = _fixture.Create<LoginViewModel>();
             var loginResponseViewModel = _fixture.Create<LoginResponseViewModel>();
-            var loginResponseViewModelTask = Task.FromResult(loginResponseViewModel);
 
             // Set up the mock user service to return the fake response task
             _mockUserService.Setup(repo => repo.Login(It.IsAny<LoginViewModel>()))
-                .Returns(loginResponseViewModelTask);
+                .ReturnsAsync(loginResponseViewModel);
 
             // Create the controller with the mock user service
             _userController = new UserController(_mockUserService.Object);
@@ -77,11 +75,10 @@ namespace TasteBud.UnitTests.ControllerTests
             // Arrange
             var loginViewModel = _fixture.Create<LoginViewModel>();
             LoginResponseViewModel loginResponseViewModel = null; // Simulate a failing login
-            var loginResponseViewModelTask = Task.FromResult(loginResponseViewModel);
 
             // Set up the mock user service to return the fake response task
             _mockUserService.Setup(repo => repo.Login(It.IsAny<LoginViewModel>()))
-                .Returns(loginResponseViewModelTask);
+                .ReturnsAsync(loginResponseViewModel);
 
             // Create the controller with the mock user service
             _userController = new UserController(_mockUserService.Object);
