@@ -5,6 +5,12 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TasteBud.API.Data;
 using TasteBud.API.Helpers.Jwt;
+using TasteBud.API.Repositories.QuizRepository;
+using TasteBud.API.Repositories.ResultRepository;
+using TasteBud.API.Services.ProcessQuizService;
+using TasteBud.API.Services.RandomizerService;
+using TasteBud.API.Services.UserService;
+using TasteBud.API.Services.YelpService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,9 +49,23 @@ builder.Services.AddAuthentication(options =>
 });
 builder.Services.Configure<JWTAppSettings>(builder.Configuration.GetSection("JWTAppSettings"));
 
+// Configure other services
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IYelpService, YelpService>();
+builder.Services.AddHttpClient<IYelpService, YelpService>();
+builder.Services.AddScoped<IRandomizerService, RandomizerService>();
+builder.Services.AddScoped<IProcessQuizService, ProcessQuizService>();
+
+// Configure repositories
+builder.Services.AddScoped<IQuizRepository, QuizRepository>();
+builder.Services.AddScoped<IResultRepository, ResultRepository>();
+
+// Add controllers and API explorer
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -53,7 +73,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
-// Authentication & Authorization
+// Enable authentication & authorization
 app.UseAuthentication();
 app.UseAuthorization();
 
