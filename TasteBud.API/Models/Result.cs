@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TasteBud.API.Models
 {
-    // Model to represent 
+    // Model to represent a result from a quiz that a specific user has taken
     public class Result
     {
         [Key]

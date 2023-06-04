@@ -1,5 +1,6 @@
 ﻿namespace TasteBud.API.ViewModels.YelpViewModels
 {
+    // Represents the information returned from the Yelp Api
     public class YelpResponseViewModel
     {
         public List<Business> Businesses { get; set; }
