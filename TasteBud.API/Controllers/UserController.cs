@@ -38,15 +38,8 @@ namespace TasteBud.API.Controllers
             // Call UserService to perform the login operation
             var result = await _userService.Login(loginViewModel);
 
-            if (!string.IsNullOrEmpty(result?.Token))
-            {
-                // If the login is successful and a valid jwt token is generated,
-                // return the token in an Ok response
-                return Ok(result);
-            }
-
-            // If login fails, return an Unauthorized response
-            return Unauthorized();
+            // Return the result of the login process in an Ok response
+            return Ok(result);
         }
     }
 }

@@ -23,16 +23,21 @@ namespace TasteBud.API.Services.UserService
             _jWTAppSettings = jWTAppSettings.Value;
         }
 
-        // Definition: Performs user registration
+        // Definition: Performs user registration and automatically logs in the user
         // Param: RegisterViewModel 
         // Return: a Task that represents an asynchronous operation and resolves to a RegisterResponseViewModel
         public async Task<GeneralResponseViewModel> Register(RegisterViewModel registerViewModel)
         {
             // Check if the user already exists
-            var userExists = await _userManager.FindByNameAsync(registerViewModel.Username);
-            if (userExists != null)
+            var usernameExists = await _userManager.FindByNameAsync(registerViewModel.Username);
+            var emailExists = await _userManager.FindByEmailAsync(registerViewModel.Email);
+
+            if (usernameExists != null || emailExists != null)
             {
-                return new GeneralResponseViewModel { Status = "Error", Message = "User already exists!" };
+                return new GeneralResponseViewModel { 
+                    Status = "Error", 
+                    Message = "Username or email already exists!" 
+                };
             }
 
             // Create a new IdentityUser object with the provided user details
@@ -46,14 +51,43 @@ namespace TasteBud.API.Services.UserService
             // Attempt to create the user using the UserManager
             var result = await _userManager.CreateAsync(user, registerViewModel.Password);
 
+            // Retrieve the roles assigned to the user
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            // Create a list of claims to be included in the authentication token
+            var authClaims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            };
+
+            // Add the user roles as claims to the authentication token
+            foreach (var userRole in userRoles)
+            {
+                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+            }
+
+            // Generate the JWT token using the authClaims
+            var token = GetToken(authClaims);
+
             // Return a error response if the user was NOT created successfully
             if (!result.Succeeded)
             {
-                return new GeneralResponseViewModel { Status = "Error", Message = "User registration failed. Please check user details and try again." };
+                return new GeneralResponseViewModel 
+                { 
+                    Status = "Error", 
+                    Message = "User registration failed. Please check user details and try again." 
+                };
             }
 
             // Return a success response if the user was created successfully
-            return new GeneralResponseViewModel { Status = "Success", Message = "User created successfully!" };
+            return new RegisterResponseViewModel {
+                Status = "Success",
+                Message = "User created successfully!",
+                Username = user.UserName,
+                Token = new JwtSecurityTokenHandler().WriteToken(token)
+            };
         }
 
         // Definition: Performs user login
@@ -91,9 +125,11 @@ namespace TasteBud.API.Services.UserService
                 // and its expiration date
                 return new LoginResponseViewModel
                 {
+                    Status = "Success",
+                    Message = "Login successful!",
+                    Username = user.UserName,
                     Token = new JwtSecurityTokenHandler().WriteToken(token),
                     Expiration = token.ValidTo,
-                    Message = "Login successful!"
                 };
             }
 
@@ -101,6 +137,7 @@ namespace TasteBud.API.Services.UserService
             // or the password is incorrect
             return new LoginResponseViewModel
             {
+                Status = "Error",
                 Message = "Invalid username or password."
             };
         }

@@ -44,7 +44,7 @@ namespace TasteBud.UnitTests.ControllerTests
             Assert.IsType<GeneralResponseViewModel>(obj.Value);
             Assert.Equal(generalResponseViewModel, obj.Value);
         }
-        
+
         [Fact]
         public async Task Post_Login_User_Returns_OK_With_Login_Response_Body()
         {
@@ -67,27 +67,6 @@ namespace TasteBud.UnitTests.ControllerTests
             Assert.Equal(200, obj.StatusCode);
             Assert.IsType<LoginResponseViewModel>(obj.Value);
             Assert.Equal(loginResponseViewModel, obj.Value);
-        }
-
-        [Fact]
-        public async Task Post_Login_User_Returns_Unauthorized_When_Login_Fails()
-        {
-            // Arrange
-            var loginViewModel = _fixture.Create<LoginViewModel>();
-            LoginResponseViewModel loginResponseViewModel = null; // Simulate a failing login
-
-            // Set up the mock user service to return the fake response task
-            _mockUserService.Setup(repo => repo.Login(It.IsAny<LoginViewModel>()))
-                .ReturnsAsync(loginResponseViewModel);
-
-            // Create the controller with the mock user service
-            _userController = new UserController(_mockUserService.Object);
-
-            // Act
-            var result = await _userController.Login(loginViewModel);
-
-            // Assert
-            Assert.IsType<UnauthorizedResult>(result);
         }
     }
 }
