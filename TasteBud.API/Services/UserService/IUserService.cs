@@ -9,12 +9,12 @@ namespace TasteBud.API.Services.UserService
     {
         // Definition: Performs user registration
         // Param: RegisterViewModel 
-        // Return: a Task that represents an asynchronous operation and resolves to a RegisterResponseViewModel
+        // Return: a Task that represents an asynchronous operation and resolves to a UserResponseViewModel
         Task<GeneralResponseViewModel> Register(RegisterViewModel registerViewModel);
 
         // Definition: Performs user login
         // Param: LoginViewModel 
-        // Return: a Task that represents an asynchronous operation and resolves to a LoginResponseViewModel
-        Task<LoginResponseViewModel> Login(LoginViewModel loginViewModel);
+        // Return: a Task that represents an asynchronous operation and resolves to a UserResponseViewModel
+        Task<GeneralResponseViewModel> Login(LoginViewModel loginViewModel);
     }
 }

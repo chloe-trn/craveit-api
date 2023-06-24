@@ -1,7 +1,7 @@
-﻿namespace TasteBud.API.ViewModels.Login
+﻿namespace TasteBud.API.ViewModels.UserViewModels
 {
     // Represents the response to a user login request
-    public class LoginResponseViewModel
+    public class UserResponseViewModel: GeneralResponseViewModel
     {
         // A Jwt token provided for a user's session
         public string Token { get; set; }

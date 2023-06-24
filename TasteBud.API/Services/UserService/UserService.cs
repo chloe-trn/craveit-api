@@ -8,6 +8,7 @@ using System.Text;
 using TasteBud.API.ViewModels;
 using TasteBud.API.ViewModels.Login;
 using TasteBud.API.ViewModels.Register;
+using TasteBud.API.ViewModels.UserViewModels;
 
 namespace TasteBud.API.Services.UserService
 {
@@ -82,18 +83,19 @@ namespace TasteBud.API.Services.UserService
             }
 
             // Return a success response if the user was created successfully
-            return new RegisterResponseViewModel {
+            return new UserResponseViewModel {
                 Status = "Success",
                 Message = "User created successfully!",
                 Username = user.UserName,
-                Token = new JwtSecurityTokenHandler().WriteToken(token)
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Expiration = token.ValidTo
             };
         }
 
         // Definition: Performs user login
         // Param: LoginViewModel 
         // Return: a Task that represents an asynchronous operation and resolves to a LoginResponseViewModel
-        public async Task<LoginResponseViewModel> Login(LoginViewModel loginViewModel)
+        public async Task<GeneralResponseViewModel> Login(LoginViewModel loginViewModel)
         {
             // Find user by the provided username
             var user = await _userManager.FindByNameAsync(loginViewModel.Username);
@@ -123,7 +125,7 @@ namespace TasteBud.API.Services.UserService
 
                 // Return the login response containing the generated token
                 // and its expiration date
-                return new LoginResponseViewModel
+                return new UserResponseViewModel
                 {
                     Status = "Success",
                     Message = "Login successful!",
@@ -135,7 +137,7 @@ namespace TasteBud.API.Services.UserService
 
             // Return an empty login response if the user is not found
             // or the password is incorrect
-            return new LoginResponseViewModel
+            return new GeneralResponseViewModel
             {
                 Status = "Error",
                 Message = "Invalid username or password."

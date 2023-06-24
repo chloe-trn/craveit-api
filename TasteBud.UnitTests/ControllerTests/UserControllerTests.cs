@@ -50,11 +50,11 @@ namespace TasteBud.UnitTests.ControllerTests
         {
             // Arrange
             var loginViewModel = _fixture.Create<LoginViewModel>();
-            var loginResponseViewModel = _fixture.Create<LoginResponseViewModel>();
+            var generalResponseViewModel = _fixture.Create<GeneralResponseViewModel>();
 
             // Set up the mock user service to return the fake response task
             _mockUserService.Setup(repo => repo.Login(It.IsAny<LoginViewModel>()))
-                .ReturnsAsync(loginResponseViewModel);
+                .ReturnsAsync(generalResponseViewModel);
 
             // Create the controller with the mock user service
             _userController = new UserController(_mockUserService.Object);
@@ -65,8 +65,8 @@ namespace TasteBud.UnitTests.ControllerTests
 
             // Assert
             Assert.Equal(200, obj.StatusCode);
-            Assert.IsType<LoginResponseViewModel>(obj.Value);
-            Assert.Equal(loginResponseViewModel, obj.Value);
+            Assert.IsType<GeneralResponseViewModel>(obj.Value);
+            Assert.Equal(generalResponseViewModel, obj.Value);
         }
     }
 }
