@@ -14,6 +14,10 @@ namespace TasteBud.API.Models
 
         public DateTime Date { get; set; }
 
+        public string Location { get; set; }
+
+        public string Distance { get; set; }
+
         public string PriceRange { get; set; }
 
         public string Cuisine { get; set; }
