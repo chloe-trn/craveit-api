@@ -31,11 +31,11 @@ namespace TasteBud.API.Services.ProcessQuizService
             _quizRepository.AddQuiz(quiz);
 
             // Call the GetYelpData method to retrieve the Yelp API response
-            YelpResponseViewModel yelpResponse = await _yelpService.GetYelpData(); // TODO: pass quiz parameters
+            YelpResponseViewModel yelpResponse = await _yelpService.GetYelpData(quiz);
 
             if (!yelpResponse.Businesses.Any()) // No businesses are present in the list
             {
-                throw new Exception("No businesses found.");
+                throw new Exception("No businesses found with this criteria");
             }
 
             // Pass the Yelp API response to the randomizer service

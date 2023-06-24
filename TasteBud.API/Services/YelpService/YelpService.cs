@@ -5,6 +5,7 @@ using static System.Net.WebRequestMethods;
 using TasteBud.API.ViewModels.YelpViewModels;
 using TasteBud.API.Services.YelpService;
 using Microsoft.Extensions.Configuration;
+using TasteBud.API.Models;
 
 namespace TasteBud.API.Services.YelpService
 {
@@ -20,15 +21,35 @@ namespace TasteBud.API.Services.YelpService
             _configuration = configuration;
         }
 
-        public async Task<YelpResponseViewModel> GetYelpData() // TODO: pass in quiz as a parameter and use it to build the request URL
+        public async Task<YelpResponseViewModel> GetYelpData(Quiz quiz)
         {
-            // Build request URL 
-            string location = "NYC";
+            // Define request URL parameters
+            string location = quiz.Location;
+            string distance = quiz.Distance;
+            string priceRange = quiz.PriceRange;
+            string cuisine = quiz.Cuisine;
             string sortBy = "best_match";
-            string limit = "20";
-            string URL = $"https://api.yelp.com/v3/businesses/search?location={location}&sort_by={sortBy}&limit={limit}";
+            string limit = "50";
 
-           
+            // Split the comma-separated values into an array
+            string[] priceRangeValues = priceRange.Split(',');
+            string[] cuisineValues = cuisine.Split(',');
+
+            // Build initial request URL
+            string URL = $"https://api.yelp.com/v3/businesses/search?location={location}&radius={distance}&sort_by={sortBy}&limit={limit}";
+
+            // Append price ranges to URL
+            foreach (string price in priceRangeValues)
+            {
+                URL += $"&price={price}";
+            }
+
+            // Append cuisine types to URL
+            foreach (string category in cuisineValues)
+            {
+                URL += $"&categories={category}";
+            }
+
             // Retrieve the yelp api key
             string yelpSecretApiKey = _configuration["ConnectionStrings:YelpApiSecretKey"];
 
