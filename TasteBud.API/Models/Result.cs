@@ -21,5 +21,9 @@ namespace TasteBud.API.Models
         public string Location { get; set; }
 
         public string PriceRange { get; set; }
+
+        public string Distance { get; set; }
+
+        public float Rating { get; set; }
     }
 }
