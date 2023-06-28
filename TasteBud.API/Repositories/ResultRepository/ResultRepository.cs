@@ -16,9 +16,17 @@ namespace TasteBud.API.Repositories.ResultRepository
         // Retrieves a list of results based on the authenticated user
         public async Task<List<Result>> GetResults(string authenticatedUserId)
         {
-            return await _context.Result
-                .Where(r => r.UserId == authenticatedUserId)
-                .ToListAsync();
+            var groupedResults = await _context.Result
+               .Where(r => r.UserId == authenticatedUserId)
+               .GroupBy(r => r.RestaurantName)
+               .ToListAsync();
+
+            var sortedResults = groupedResults
+                .SelectMany(g => g.OrderByDescending(r => r.Date))
+                .OrderBy(r => r.Date)  // Sort in ascending order
+                .ToList();
+
+            return sortedResults;
         }
 
         // Retrieves a specific result by its ID based on the authenticated user
