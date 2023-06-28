@@ -81,7 +81,7 @@ namespace TasteBud.API.Controllers
             try
             {
                 // Call the ProcessQuizService to get a quiz result (a random business) 
-                Business quizResult = await _processQuizService.ProcessQuiz(quiz, authenticatedUserId);
+                object quizResult = await _processQuizService.ProcessQuiz(quiz, authenticatedUserId);
 
                 // Return the result in an Ok response
                 return Ok(quizResult);

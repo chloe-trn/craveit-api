@@ -7,6 +7,6 @@ namespace TasteBud.API.Services.ProcessQuizService
     public interface IProcessQuizService
     {
         // Processes a user quiz and retrieves a quiz result
-        Task<Business> ProcessQuiz(Quiz quiz, string authenticatedUserId);
+        Task<object> ProcessQuiz(Quiz quiz, string authenticatedUserId);
     }
 }

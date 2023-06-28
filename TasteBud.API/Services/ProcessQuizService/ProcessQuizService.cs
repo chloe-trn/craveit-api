@@ -25,7 +25,7 @@ namespace TasteBud.API.Services.ProcessQuizService
             _randomizerService = randomizerService;
         }
 
-        public async Task<Business> ProcessQuiz(Quiz quiz, string authenticatedUserId)
+        public async Task<object> ProcessQuiz(Quiz quiz, string authenticatedUserId)
         {
             // Add quiz to the database
             _quizRepository.AddQuiz(quiz);
@@ -41,21 +41,14 @@ namespace TasteBud.API.Services.ProcessQuizService
             // Pass the Yelp API response to the randomizer service
             Business result = _randomizerService.GetRandomListItem(yelpResponse.Businesses);
 
-            // Create a new Result object and assign values to its properties
-            Result resultEntry = new Result
+            // Create the result object
+            var resultObject = new
             {
-                Date = DateTime.Now,
-                RestaurantName = result.Name,
-                Location = $"{result.Location.Address1} {result.Location.City} {result.Location.State}, {result.Location.ZipCode}",
-                PriceRange = result.Price,
                 QuizId = quiz.Id,
-                UserId = authenticatedUserId
+                Business = result
             };
 
-            // Add quiz result to the database
-            _resultRepository.AddResult(resultEntry);
-
-            return result;
+            return resultObject;
         }
     }
 }
